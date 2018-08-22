@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  collector:
+    build: ./collector
+    container_name: collector
+    image: tunahanpehlivan/collector
+    restart: always
+    ports:
+    - "8080:8080"
+    depends_on:
+    - kafka
+    links:
+    - kafka:kafka
+
+  recorder:
+    build: ./recorder
+    container_name: recorder
+    image: tunahanpehlivan/recorder
+    restart: always
+    depends_on:
+      - kafka
+    links:
+      - kafka:kafka
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    restart: always
+    ports:
+    - 2181:2181
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    restart: always
+    ports:
+    - 9092:9092
+    depends_on:
+    - zookeeper
+    links:
+    - zookeeper:zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
