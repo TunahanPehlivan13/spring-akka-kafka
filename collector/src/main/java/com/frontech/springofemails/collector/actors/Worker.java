@@ -4,6 +4,7 @@ import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 import com.frontech.springofemails.collector.messages.Dataset;
 import com.frontech.springofemails.collector.service.EmailPublisher;
+import com.frontech.springofemails.collector.validator.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,15 +19,19 @@ public class Worker extends UntypedActor {
     @Autowired
     private EmailPublisher emailPublisher;
 
-    // TODO java8 with AbstractActor
+    @Autowired
+    private EmailValidator emailValidator;
+
     @Override
     public void onReceive(Object message) {
 
         if (message instanceof Dataset) {
             Dataset dataset = (Dataset) message;
-            dataset.getEmail().forEach(e -> {
-                emailPublisher.send("emails", e);
-            });
+            dataset.getEmail().stream()
+                    .filter(e -> emailValidator.validate(e))
+                    .forEach(e -> {
+                        emailPublisher.send("emails", e);
+                    });
 
             dataset.getUrl().forEach(url -> { // TODO send request
                 /*Dataset requestedDataset = httpService.sendRequest(url);
