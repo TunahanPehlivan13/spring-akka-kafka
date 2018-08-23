@@ -2,8 +2,6 @@ package com.frontech.springofemails.collector.actors;
 
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 import com.frontech.springofemails.collector.messages.Dataset;
 import com.frontech.springofemails.collector.service.EmailPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ public class Worker extends UntypedActor {
     @Autowired
     private EmailPublisher emailPublisher;
 
+    // TODO java8 with AbstractActor
     @Override
     public void onReceive(Object message) {
 
@@ -29,7 +28,7 @@ public class Worker extends UntypedActor {
                 emailPublisher.send("emails", e);
             });
 
-            dataset.getUrl().forEach(url -> { // TODO can not send request
+            dataset.getUrl().forEach(url -> { // TODO send request
                 /*Dataset requestedDataset = httpService.sendRequest(url);
                 log.info("{} is requested", url);
                 masterActor.tell(requestedDataset, ActorRef.noSender());*/

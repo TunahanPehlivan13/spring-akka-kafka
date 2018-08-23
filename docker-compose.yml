@@ -37,7 +37,7 @@ services:
     build: ./setup-cassandra
     links:
     - cassandra
-    command: bash -c "sleep 40 && echo Creating keyspace test && cqlsh cassandra -f init.cql && sleep infinity"
+    command: bash -c "sleep 40 && echo Creating keyspace && cqlsh cassandra -f init.cql && sleep infinity"
 
   collector:
     build: ./collector

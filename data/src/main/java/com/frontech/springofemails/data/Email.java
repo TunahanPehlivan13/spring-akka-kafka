@@ -1,38 +1,38 @@
 package com.frontech.springofemails.data;
 
+import org.springframework.data.cassandra.core.mapping.Indexed;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
+
+import java.util.UUID;
 
 @Table
 public class Email {
 
     @PrimaryKey
-    private String email;
+    private UUID uuid;
 
-    private Integer count;
+    @Indexed
+    private String text;
 
-    public Email() {
-        super();
+    public Email(UUID uuid, @Indexed String text) {
+        this.uuid = uuid;
+        this.text = text;
     }
 
-    public Email(String email, Integer count) {
-        this.email = email;
-        this.count = count;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public String getEmail() {
-        return email;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getText() {
+        return text;
     }
 
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setText(String text) {
+        this.text = text;
     }
 }

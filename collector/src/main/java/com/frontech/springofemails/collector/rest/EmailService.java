@@ -1,10 +1,11 @@
 package com.frontech.springofemails.collector.rest;
 
 import akka.actor.ActorRef;
-import com.frontech.springofemails.collector.com.frontech.springofemails.repository.EmailRepository;
+import com.frontech.springofemails.collector.dto.EmailDTO;
 import com.frontech.springofemails.collector.exception.NotFoundException;
 import com.frontech.springofemails.collector.messages.Dataset;
-import com.frontech.springofemails.data.Email;
+import com.frontech.springofemails.collector.repository.EmailRepository;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-public class EmailController {
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-    private static final Logger logger = LoggerFactory.getLogger(EmailController.class);
+@RestController
+public class EmailService {
+
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     @Autowired
     private ActorRef masterActor;
@@ -31,17 +36,34 @@ public class EmailController {
         masterActor.tell(dataset, ActorRef.noSender());
     }
 
+
     @GetMapping(value = "/emails/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public Email getEmail(@PathVariable String email) {
+    public EmailDTO getEmail(@PathVariable String email) {
         logger.info("emails/{email}#GET is requested with {}", email);
-        return emailRepository.findById(email).orElseThrow(NotFoundException::new);
+
+        int count = emailRepository.findByText(email).size();
+        boolean isExist = count > 0;
+
+        if (isExist) {
+            return new EmailDTO(email, Long.valueOf(count));
+        }
+        throw new NotFoundException();
     }
 
     @GetMapping(value = "/emails")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Email> getAllEmails() {
+    public List<EmailDTO> getAllEmails() {
         logger.info("emails#GET is requested");
-        return emailRepository.findAll();
+
+        List<EmailDTO> emails = Lists.newArrayList();
+        Map<String, Long> emailMap = emailRepository.findAll().stream()
+                .collect(Collectors.groupingBy(e -> e.getText(),
+                        Collectors.counting()));
+
+        emailMap.forEach((email, count) -> {
+            emails.add(new EmailDTO(email, count));
+        });
+        return emails;
     }
 }

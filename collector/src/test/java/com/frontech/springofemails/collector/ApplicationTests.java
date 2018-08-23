@@ -1,6 +1,6 @@
 package com.frontech.springofemails.collector;
 
-import com.frontech.springofemails.collector.rest.EmailController;
+import com.frontech.springofemails.collector.rest.EmailService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 public class ApplicationTests {
 
     @Autowired
-    private EmailController emailController;
+    private EmailService emailController;
 
     @Test
     public void contextLoads() {

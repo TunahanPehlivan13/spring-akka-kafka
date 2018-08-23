@@ -43,6 +43,7 @@ public class Master extends UntypedActor {
         super.preStart();
     }
 
+    // TODO java8 with AbstractActor
     @Override
     public void onReceive(Object message) {
         log.info(message.toString());

@@ -20,5 +20,3 @@ cd ..
 docker-compose build
 
 docker-compose up
-
-cmd /k
