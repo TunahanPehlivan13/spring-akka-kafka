@@ -1,4 +1,4 @@
-package com.frontech.springofemails.recorder.repository;
+package com.frontech.springofemails.collector.com.frontech.springofemails.repository;
 
 import com.frontech.springofemails.data.Email;
 import org.springframework.data.repository.CrudRepository;

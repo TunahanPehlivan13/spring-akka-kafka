@@ -1,6 +1,6 @@
 package com.frontech.springofemails.recorder.consumer;
 
-import com.frontech.springofemails.recorder.data.Email;
+import com.frontech.springofemails.data.Email;
 import com.frontech.springofemails.recorder.repository.EmailRepository;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ public class KafkaEmailConsumer {
     public void receive(ConsumerRecord<String, String> consumerRecord) {
         logger.info("Received payload='{}'", consumerRecord.toString());
 
-        emailRepository.save(new Email(consumerRecord.value(), 1));
+        emailRepository.save(new Email(consumerRecord.value(), 2));
         latch.countDown();
     }
 

@@ -1,4 +1,4 @@
-package com.frontech.springofemails.recorder.data;
+package com.frontech.springofemails.data;
 
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;

@@ -68,6 +68,11 @@
             <version>3.3.0.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.frontech.springofemails</groupId>
+            <artifactId>data</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,32 +1,6 @@
 version: '3'
 
 services:
-  collector:
-    build: ./collector
-    container_name: collector
-    image: tunahanpehlivan/collector
-    restart: always
-    ports:
-    - "8080:8080"
-    depends_on:
-    - kafka
-    - cassandra
-    links:
-    - kafka:kafka
-    - cassandra:cassandra
-
-  recorder:
-    build: ./recorder
-    container_name: recorder
-    image: tunahanpehlivan/recorder
-    restart: always
-    depends_on:
-    - kafka
-    - cassandra
-    links:
-    - kafka:kafka
-    - cassandra:cassandra
-
   zookeeper:
     image: wurstmeister/zookeeper
     container_name: zookeeper
@@ -64,3 +38,29 @@ services:
     links:
     - cassandra
     command: bash -c "sleep 40 && echo Creating keyspace test && cqlsh cassandra -f init.cql && sleep infinity"
+
+  collector:
+    build: ./collector
+    container_name: collector
+    image: tunahanpehlivan/collector
+    restart: always
+    ports:
+    - 8080:8080
+    depends_on:
+    - kafka
+    - cassandra
+    links:
+    - kafka:kafka
+    - cassandra:cassandra
+
+  recorder:
+    build: ./recorder
+    container_name: recorder
+    image: tunahanpehlivan/recorder
+    restart: always
+    depends_on:
+    - kafka
+    - cassandra
+    links:
+    - kafka:kafka
+    - cassandra:cassandra
