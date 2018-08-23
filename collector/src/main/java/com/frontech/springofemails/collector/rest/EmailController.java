@@ -24,7 +24,7 @@ public class EmailController {
             consumes = MediaType.APPLICATION_XML_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void saveEmails(@RequestBody Dataset dataset) {
-        logger.info("emails#POST is requested with {]", dataset);
+        logger.info("emails#POST is requested with {}", dataset);
         masterActor.tell(dataset, ActorRef.noSender());
     }
 }

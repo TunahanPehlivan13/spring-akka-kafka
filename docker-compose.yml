@@ -10,8 +10,10 @@ services:
     - "8080:8080"
     depends_on:
     - kafka
+    - cassandra
     links:
     - kafka:kafka
+    - cassandra:cassandra
 
   recorder:
     build: ./recorder
@@ -19,9 +21,11 @@ services:
     image: tunahanpehlivan/recorder
     restart: always
     depends_on:
-      - kafka
+    - kafka
+    - cassandra
     links:
-      - kafka:kafka
+    - kafka:kafka
+    - cassandra:cassandra
 
   zookeeper:
     image: wurstmeister/zookeeper
@@ -43,3 +47,20 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+  cassandra:
+    container_name: cassandra
+    image: cassandra:3.11.1
+    ports:
+    - 7000:7000
+    - 7001:7001
+    - 9160:9160
+    - 9042:9042
+    - 7199:7199
+
+  setup-cassandra:
+    container_name: setup-cassandra
+    build: ./setup-cassandra
+    links:
+    - cassandra
+    command: bash -c "sleep 40 && echo Creating keyspace test && cqlsh cassandra -f init.cql && sleep infinity"
