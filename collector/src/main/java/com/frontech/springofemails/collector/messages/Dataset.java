@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @XmlRootElement
 public class Dataset {
@@ -19,7 +20,7 @@ public class Dataset {
     }
 
     public List<String> getEmail() {
-        return email;
+        return Optional.ofNullable(email).orElse(new ArrayList<>());
     }
 
     public void setEmail(List<String> email) {
@@ -27,7 +28,7 @@ public class Dataset {
     }
 
     public List<String> getUrl() {
-        return url;
+        return Optional.ofNullable(url).orElse(new ArrayList<>());
     }
 
     public void setUrl(List<String> url) {

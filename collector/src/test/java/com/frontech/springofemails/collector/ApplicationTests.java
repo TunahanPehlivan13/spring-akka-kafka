@@ -14,10 +14,10 @@ import static org.junit.Assert.assertNotNull;
 public class ApplicationTests {
 
     @Autowired
-    private EmailService emailController;
+    private EmailService emailService;
 
     @Test
     public void contextLoads() {
-        assertNotNull(emailController);
+        assertNotNull(emailService);
     }
 }

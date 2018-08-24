@@ -2,13 +2,11 @@ package com.frontech.springofemails.recorder.consumer;
 
 import com.datastax.driver.core.utils.UUIDs;
 import com.frontech.springofemails.data.Email;
+import com.frontech.springofemails.recorder.wrapper.CassandraBatchWrapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.cassandra.core.CassandraBatchOperations;
-import org.springframework.data.cassandra.core.CassandraTemplate;
-import org.springframework.data.cassandra.core.WriteResult;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -24,24 +22,16 @@ public class KafkaEmailConsumer {
 
     private CountDownLatch latch = new CountDownLatch(1);
     private final long FIVE_MINUTES = 20 * 1000;
-    private CassandraBatchOperations batchOperations;
 
     @Autowired
-    private CassandraTemplate cassandraTemplate;
+    private CassandraBatchWrapper cassandraBatchWrapper;
 
     @PostConstruct
     public void init() {
-        batchOperations = cassandraTemplate.batchOps();
 
         new Timer().schedule(new TimerTask() {
             public void run() {
-                WriteResult result = batchOperations.execute();
-                if (result.wasApplied()) {
-                    logger.info("Bulk data is executed");
-                } else {
-                    logger.error("There was something wrong!");
-                }
-                batchOperations = cassandraTemplate.batchOps();
+                cassandraBatchWrapper.execute();
             }
         }, 0, FIVE_MINUTES);
     }
@@ -50,7 +40,7 @@ public class KafkaEmailConsumer {
     public void receive(ConsumerRecord<String, String> consumerRecord) {
         logger.info("Received payload='{}'", consumerRecord.toString());
 
-        batchOperations.insert(new Email(UUIDs.timeBased(), consumerRecord.value()));
+        cassandraBatchWrapper.insert(new Email(UUIDs.timeBased(), consumerRecord.value()));
 
         latch.countDown();
     }
