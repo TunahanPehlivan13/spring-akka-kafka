@@ -21,7 +21,7 @@ public class KafkaEmailConsumer {
     private static final Logger logger = LoggerFactory.getLogger(KafkaEmailConsumer.class);
 
     private CountDownLatch latch = new CountDownLatch(1);
-    private final long FIVE_MINUTES = 20 * 1000;
+    private final long FIVE_MINUTES = 5 * 60 * 1000;
 
     @Autowired
     private CassandraBatchWrapper cassandraBatchWrapper;

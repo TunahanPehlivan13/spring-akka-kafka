@@ -65,13 +65,4 @@ public class EmailService {
         });
         return emails;
     }
-
-    @GetMapping(value = "/dummy-emails")
-    @ResponseStatus(HttpStatus.OK)
-    public Dataset getDummyEmails() {
-        logger.info("emails#GET is requested");
-        Dataset dataset = new Dataset();
-        dataset.getEmail().add("tuna@hotmail.com");
-        return dataset;
-    }
 }
