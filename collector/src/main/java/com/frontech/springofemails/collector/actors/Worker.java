@@ -43,10 +43,9 @@ public class Worker extends UntypedActor {
                     });
 
             dataset.getUrl()
-                    .parallelStream()
                     .forEach(url -> {
                         Dataset requestedDataset = sendRequest(url);
-                        log.info("{} is requested.", url);
+                        log.info("{} is requested", url);
                         masterActor.tell(requestedDataset, ActorRef.noSender());
                     });
         }

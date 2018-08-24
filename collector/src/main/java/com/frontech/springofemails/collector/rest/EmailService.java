@@ -36,7 +36,6 @@ public class EmailService {
         masterActor.tell(dataset, ActorRef.noSender());
     }
 
-
     @GetMapping(value = "/emails/{email}")
     @ResponseStatus(HttpStatus.OK)
     public EmailDTO getEmail(@PathVariable String email) {

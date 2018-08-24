@@ -4,9 +4,6 @@ import akka.actor.Actor;
 import akka.actor.IndirectActorProducer;
 import org.springframework.context.ApplicationContext;
 
-/**
- * An actors producer that lets Spring create the Actor instances.
- */
 public class SpringActorProducer implements IndirectActorProducer {
 
     private final ApplicationContext applicationContext;
